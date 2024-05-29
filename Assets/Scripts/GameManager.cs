@@ -3,27 +3,30 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public Player _player;
     public TextMeshProUGUI scoreText;
-    public GameObject _GameOver;
+    public GameObject gameOver;
     public GameObject PlayButton;
     private int score;
+    [SerializeField] private AudioSource scoreMusic;
+    
     private void Awake()
     {
-        _player = GetComponent<Player>();
-        PauseGame();
+        Application.targetFrameRate = 60;
+        Pause();
     }
     public void PlayGame()
     {
-        Application.targetFrameRate = 60;
+        score = 0;
         scoreText.text=score.ToString();
 
         PlayButton.SetActive(false);
-        _GameOver.SetActive(false);
+        gameOver.SetActive(false);
 
-        Time.timeScale = 1;
+        Time.timeScale = 1f;
         _player.enabled=true;
 
         Pipes[] pipes = FindObjectsOfType<Pipes>();
@@ -32,20 +35,22 @@ public class GameManager : MonoBehaviour
             Destroy(pipes[i].gameObject);
         }
     }
-    public void PauseGame()
+    public void Pause()
     {
-        Time.timeScale = 0;
-        _player.enabled= false;
+        Time.timeScale = 0f;
+        _player.enabled = false;
     }
     public void increaseScore()
     {
+        scoreMusic.Play();
         score++;
         scoreText.text = score.ToString();
     }
     public void GameOver()
     {
-        _GameOver.SetActive(true);
-        PlayButton.SetActive(true);
-        PauseGame();
+       gameOver.SetActive(true);
+       PlayButton.SetActive(true);
+       Pause();
     }
+    
 }

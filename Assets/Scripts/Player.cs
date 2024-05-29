@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -8,17 +10,14 @@ public class Player : MonoBehaviour
     private Vector3 direction;
     [SerializeField] private float gravity;
     [SerializeField] private float strength;
+    
+    private void Awake()
+    {
+        Time.timeScale = 0;
+    }
     private void Start()
     {
         anim=GetComponent<Animator>();
-    }
-   
-    private void Onenable()
-    {
-        Vector3 position = transform.position;
-        position.y = 0f;
-        transform.position = position;
-        direction = Vector3.zero;
     }
     private void Update()
     {
@@ -28,6 +27,13 @@ public class Player : MonoBehaviour
         }
         direction.y +=gravity * Time.deltaTime;
         transform.position += direction * Time.deltaTime;
+    }
+    private void OnEnable()
+    {
+        Vector3 position = transform.position;
+        position.y = 0f;
+        transform.position = position;
+        direction = Vector3.zero;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -40,4 +46,5 @@ public class Player : MonoBehaviour
             FindObjectOfType<GameManager>().increaseScore();
         }
     }
+    
 }
